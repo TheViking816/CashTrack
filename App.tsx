@@ -13,11 +13,23 @@ const App: React.FC = () => {
 
     useEffect(() => {
         let mounted = true;
-        supabase.auth.getSession().then(({ data }) => {
-            if (!mounted) return;
-            setIsAuthenticated(!!data.session);
-            setSessionReady(true);
-        });
+        const initSession = async () => {
+            try {
+                const { data } = await supabase.auth.getSession();
+                if (!mounted) return;
+                setIsAuthenticated(!!data.session);
+            } catch (error) {
+                console.error('Failed to restore session', error);
+                if (!mounted) return;
+                setIsAuthenticated(false);
+            } finally {
+                if (mounted) {
+                    setSessionReady(true);
+                }
+            }
+        };
+
+        initSession();
         const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
             setIsAuthenticated(!!session);
             setSessionReady(true);

@@ -33,7 +33,11 @@ const Dashboard: React.FC = () => {
     }, []);
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
+        try {
+            await supabase.auth.signOut({ scope: 'local' });
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
     };
 
     const balanceParts = balance.toFixed(2).split('.');
