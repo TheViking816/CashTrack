@@ -69,10 +69,10 @@ const Dashboard: React.FC = () => {
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                     <p className="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider mb-2 z-10">Saldo Actual</p>
                     <div className="flex items-baseline gap-1 z-10">
-                        <span className="text-primary font-bold text-4xl sm:text-5xl tracking-tight">
+                        <span className="text-green-600 dark:text-green-400 font-bold text-4xl sm:text-5xl tracking-tight">
                             {loading ? '...' : balanceParts.whole}
                         </span>
-                        <span className="text-primary/70 font-semibold text-2xl">
+                        <span className="text-green-600/70 dark:text-green-400/70 font-semibold text-2xl">
                             ,{loading ? '00' : balanceParts.fraction}€
                         </span>
                     </div>
