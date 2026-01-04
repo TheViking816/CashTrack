@@ -1,0 +1,5 @@
+{
+  "name": "Calculadora de Saldo",
+  "description": "A functional balance calculator and transaction tracker using Supabase for persistence.",
+  "requestFramePermissions": []
+}
