@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cashtrack-v2';
+const CACHE_NAME = 'cashtrack-v3';
 const scopeUrl = new URL(self.registration.scope);
 const CORE_ASSETS = [
   '.',
