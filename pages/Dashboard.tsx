@@ -5,6 +5,7 @@ import { Transaction } from '../types';
 import TransactionRow from '../components/TransactionRow';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/logo-mark.png';
+import { formatCurrencyParts } from '../utils/format';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const balanceParts = balance.toFixed(2).split('.');
+    const balanceParts = formatCurrencyParts(balance);
 
     return (
         <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-20">
@@ -69,9 +70,11 @@ const Dashboard: React.FC = () => {
                     <p className="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider mb-2 z-10">Saldo Actual</p>
                     <div className="flex items-baseline gap-1 z-10">
                         <span className="text-primary font-bold text-4xl sm:text-5xl tracking-tight">
-                            € {loading ? '...' : balanceParts[0]}
+                            {loading ? '...' : balanceParts.whole}
                         </span>
-                        <span className="text-primary/70 font-semibold text-2xl">.{loading ? '00' : balanceParts[1]}</span>
+                        <span className="text-primary/70 font-semibold text-2xl">
+                            ,{loading ? '00' : balanceParts.fraction}€
+                        </span>
                     </div>
                     <div className="mt-4 flex items-center gap-2 px-3 py-1 bg-green-50 dark:bg-green-900/20 rounded-full">
                         <span className="material-symbols-outlined text-green-600 dark:text-green-400 text-sm">trending_up</span>

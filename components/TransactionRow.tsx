@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatCurrency } from '../utils/format';
 import { Transaction } from '../types';
 
 interface Props {
@@ -37,7 +38,7 @@ const TransactionRow: React.FC<Props> = ({ transaction }) => {
         </div>
       </div>
       <span className={`font-bold ${colorClass}`}>
-        {amountPrefix}€ {Math.abs(transaction.amount).toFixed(2)}
+        {amountPrefix}{formatCurrency(Math.abs(transaction.amount))}
       </span>
     </div>
   );

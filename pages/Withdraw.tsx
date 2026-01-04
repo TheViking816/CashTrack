@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
+import { formatCurrency, formatCurrencyFromInput } from '../utils/format';
 
 const Withdraw: React.FC = () => {
     const navigate = useNavigate();
@@ -51,21 +52,21 @@ const Withdraw: React.FC = () => {
                         <span className="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">Monto a retirar</span>
                     </div>
                     <div className="relative flex items-center justify-center">
-                        <span className="text-slate-300 dark:text-slate-600 text-5xl font-extrabold mr-1">€</span>
-                        <input 
-                            autoFocus 
-                            className="w-48 bg-transparent text-center text-6xl font-extrabold text-slate-900 dark:text-white border-none focus:ring-0 p-0 placeholder-slate-200 dark:placeholder-slate-700 caret-primary" 
-                            placeholder="0.00" 
+                        <input
+                            autoFocus
+                            className="w-48 bg-transparent text-center text-6xl font-extrabold text-slate-900 dark:text-white border-none focus:ring-0 p-0 placeholder-slate-200 dark:placeholder-slate-700 caret-primary"
+                            placeholder="0.00"
                             type="number"
                             min="0"
                             step="0.01"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                         />
+                        <span className="text-slate-300 dark:text-slate-600 text-5xl font-extrabold ml-1">€</span>
                     </div>
                     <div className="mt-4 flex items-center gap-2 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
                         <span className="material-symbols-outlined text-sm">account_balance_wallet</span>
-                        <span className="text-sm font-medium">Disponible: <span className="font-bold text-slate-900 dark:text-white">€{balance.toFixed(2)}</span></span>
+                        <span className="text-sm font-medium">Disponible: <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(balance)}</span></span>
                         <button 
                             onClick={handleMax}
                             className="ml-1 text-xs font-bold text-primary hover:text-blue-600 uppercase"
@@ -107,7 +108,7 @@ const Withdraw: React.FC = () => {
                             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Total a retirar</span>
                         </div>
                         <div className="text-right">
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">€{amount || '0.00'}</span>
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrencyFromInput(amount)}</span>
                         </div>
                     </div>
                     <button 
