@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo-mark.png';
 
 const Auth: React.FC = () => {
     const [mode, setMode] = useState<'login' | 'register'>('login');

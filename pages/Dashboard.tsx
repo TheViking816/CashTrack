@@ -4,7 +4,7 @@ import { api } from '../services/api';
 import { Transaction } from '../types';
 import TransactionRow from '../components/TransactionRow';
 import { supabase } from '../supabaseClient';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo-mark.png';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -44,8 +44,8 @@ const Dashboard: React.FC = () => {
             <div className="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center justify-between px-4 py-3 max-w-md mx-auto">
                     <div className="flex items-center gap-3 flex-1">
-                        <img src={logo} alt="CashTrack" className="h-9 w-9 rounded-xl shadow-sm" />
-                        <h2 className="text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white">Calculadora de Saldo</h2>
+                        <img src={logo} alt="CashTrack" className="h-11 w-11 rounded-2xl shadow-sm" />
+                        <h2 className="text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white">CashTrack</h2>
                     </div>
                     <button
                         onClick={handleSignOut}

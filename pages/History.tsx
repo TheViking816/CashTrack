@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { Transaction } from '../types';
 import TransactionRow from '../components/TransactionRow';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo-mark.png';
 
 const History: React.FC = () => {
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ const History: React.FC = () => {
                         <span className="material-symbols-outlined">arrow_back</span>
                     </button>
                     <div className="flex items-center gap-2">
-                        <img src={logo} alt="CashTrack" className="h-8 w-8 rounded-lg shadow-sm" />
+                        <img src={logo} alt="CashTrack" className="h-11 w-11 rounded-2xl shadow-sm" />
                         <h2 className="text-lg font-bold leading-tight tracking-tight text-slate-900 dark:text-white">Historial</h2>
                     </div>
                     <button
