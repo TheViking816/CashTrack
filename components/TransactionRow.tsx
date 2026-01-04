@@ -37,7 +37,7 @@ const TransactionRow: React.FC<Props> = ({ transaction }) => {
         </div>
       </div>
       <span className={`font-bold ${colorClass}`}>
-        {amountPrefix}$ {Math.abs(transaction.amount).toFixed(2)}
+        {amountPrefix}€ {Math.abs(transaction.amount).toFixed(2)}
       </span>
     </div>
   );

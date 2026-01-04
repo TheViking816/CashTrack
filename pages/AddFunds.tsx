@@ -50,7 +50,7 @@ const AddFunds: React.FC = () => {
                                 <span className="text-slate-600 dark:text-slate-300 text-xs font-bold uppercase tracking-wider">Monto a Ingresar</span>
                             </div>
                             <div className="relative w-full flex items-center justify-center">
-                                <span className="text-[4rem] font-bold text-slate-300 dark:text-slate-600 mr-2">$</span>
+                                <span className="text-[4rem] font-bold text-slate-300 dark:text-slate-600 mr-2">€</span>
                                 <input 
                                     autoFocus 
                                     className="w-full bg-transparent border-none p-0 text-center text-[4.5rem] leading-none font-extrabold tracking-tight text-slate-900 dark:text-white placeholder-slate-200 dark:placeholder-slate-700 focus:ring-0 focus:outline-none caret-primary" 
@@ -67,7 +67,7 @@ const AddFunds: React.FC = () => {
                                     Saldo actual
                                 </p>
                                 <span className="text-2xl font-bold text-slate-700 dark:text-slate-200 tracking-tight">
-                                    $ {balance.toFixed(2)}
+                                    € {balance.toFixed(2)}
                                 </span>
                             </div>
                         </div>
