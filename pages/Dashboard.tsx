@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
-import { Transaction } from '../types';
+import { TransactionWithBalance } from '../types';
 import TransactionRow from '../components/TransactionRow';
 import { supabase } from '../supabaseClient';
-import logo from '../assets/logo-mark.png';
+import logo from '../assets/logo-mark.svg';
 import { formatCurrencyParts } from '../utils/format';
+import { withRemainingBalance } from '../utils/transactions';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const [balance, setBalance] = useState<number>(0);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [transactions, setTransactions] = useState<TransactionWithBalance[]>([]);
     const [loading, setLoading] = useState(true);
 
     const loadData = async () => {
@@ -18,10 +19,10 @@ const Dashboard: React.FC = () => {
         try {
             const [fetchedBalance, fetchedTransactions] = await Promise.all([
                 api.getBalance(),
-                api.getTransactions(50)
+                api.getTransactions()
             ]);
             setBalance(fetchedBalance);
-            setTransactions(fetchedTransactions);
+            setTransactions(withRemainingBalance(fetchedTransactions).slice(0, 50));
         } catch (e) {
             console.error(e);
         } finally {
@@ -120,7 +121,7 @@ const Dashboard: React.FC = () => {
                                 <p className="text-slate-500">No hay movimientos aún</p>
                             </div>
                         ) : (
-                            transactions.map(t => <TransactionRow key={t.id} transaction={t} />)
+                            transactions.map(t => <TransactionRow key={t.id} transaction={t} onChanged={loadData} />)
                         )}
                     </div>
                 </div>

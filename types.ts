@@ -9,6 +9,10 @@ export interface Transaction {
   description: string;
 }
 
+export interface TransactionWithBalance extends Transaction {
+  remaining_balance: number;
+}
+
 export interface BalanceState {
   total: number;
   loading: boolean;

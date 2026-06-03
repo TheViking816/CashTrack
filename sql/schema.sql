@@ -28,3 +28,14 @@ create policy "Public insert transactions"
   on public.transactions
   for insert
   with check (auth.uid() = user_id);
+
+create policy "Public update transactions"
+  on public.transactions
+  for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create policy "Public delete transactions"
+  on public.transactions
+  for delete
+  using (auth.uid() = user_id);

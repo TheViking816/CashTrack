@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
-import { Transaction } from '../types';
+import { TransactionWithBalance } from '../types';
 import TransactionRow from '../components/TransactionRow';
-import logo from '../assets/logo-mark.png';
+import logo from '../assets/logo-mark.svg';
+import { withRemainingBalance } from '../utils/transactions';
 
 const History: React.FC = () => {
     const navigate = useNavigate();
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [transactions, setTransactions] = useState<TransactionWithBalance[]>([]);
     const [loading, setLoading] = useState(true);
 
     const loadData = async () => {
         setLoading(true);
         try {
             const fetchedTransactions = await api.getTransactions();
-            setTransactions(fetchedTransactions);
+            setTransactions(withRemainingBalance(fetchedTransactions));
         } catch (e) {
             console.error(e);
         } finally {
@@ -61,7 +62,7 @@ const History: React.FC = () => {
                 ) : (
                     <div className="flex flex-col gap-3">
                         {transactions.map((t) => (
-                            <TransactionRow key={t.id} transaction={t} />
+                            <TransactionRow key={t.id} transaction={t} onChanged={loadData} />
                         ))}
                     </div>
                 )}

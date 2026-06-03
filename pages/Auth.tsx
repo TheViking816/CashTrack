@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import logo from '../assets/logo-mark.png';
+import logo from '../assets/logo-mark.svg';
 
 const Auth: React.FC = () => {
     const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -47,16 +47,16 @@ const Auth: React.FC = () => {
     const isLogin = mode === 'login';
 
     return (
-        <div className="relative flex min-h-screen w-full flex-col bg-[#f6f8f6] dark:bg-[#102216] overflow-hidden font-display transition-colors duration-500">
+        <div className="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-hidden font-display transition-colors duration-500">
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-32 -right-32 w-96 h-96 bg-[#13ec5b]/10 rounded-full blur-[100px] dark:bg-[#13ec5b]/5"></div>
-                <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-[#13ec5b]/10 rounded-full blur-[80px] dark:bg-[#13ec5b]/5"></div>
+                <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/10 rounded-full blur-[100px] dark:bg-primary/10"></div>
+                <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-teal-400/10 rounded-full blur-[80px] dark:bg-teal-400/10"></div>
             </div>
 
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full max-w-md mx-auto p-8">
                 <div className="flex flex-col items-center gap-6 w-full mb-8">
                     <div className="relative group cursor-default">
-                        <div className="absolute -inset-1 bg-gradient-to-tr from-[#13ec5b] to-green-300 rounded-[2rem] opacity-30 blur-lg transition duration-500"></div>
+                        <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-teal-400 rounded-[2rem] opacity-30 blur-lg transition duration-500"></div>
                         <img
                             src={logo}
                             alt=""
@@ -73,7 +73,7 @@ const Auth: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="w-full bg-white/50 dark:bg-[#1a2e22]/50 backdrop-blur-sm rounded-3xl p-1">
+                <div className="w-full bg-white/70 dark:bg-card-dark/70 backdrop-blur-sm rounded-3xl p-1">
                     <form className="space-y-5 p-5" onSubmit={handleSubmit}>
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 ml-1" htmlFor="email">
@@ -84,7 +84,7 @@ const Auth: React.FC = () => {
                                     <span className="material-symbols-outlined text-slate-400 text-[1.25rem]">mail</span>
                                 </div>
                                 <input
-                                    className="block w-full rounded-2xl border-0 py-4 pl-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-[#13ec5b] sm:text-sm sm:leading-6 dark:bg-[#1a2e22] dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
+                                    className="block w-full rounded-2xl border-0 py-4 pl-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 dark:bg-background-dark dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
                                     id="email"
                                     name="email"
                                     placeholder="Enter your email"
@@ -104,7 +104,7 @@ const Auth: React.FC = () => {
                                     <span className="material-symbols-outlined text-slate-400 text-[1.25rem]">lock</span>
                                 </div>
                                 <input
-                                    className="block w-full rounded-2xl border-0 py-4 pl-11 pr-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-[#13ec5b] sm:text-sm sm:leading-6 dark:bg-[#1a2e22] dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
+                                    className="block w-full rounded-2xl border-0 py-4 pl-11 pr-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 dark:bg-background-dark dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
                                     id="password"
                                     name="password"
                                     placeholder="••••••••"
@@ -127,7 +127,7 @@ const Auth: React.FC = () => {
                             <div className="flex justify-end mt-2">
                                 <button
                                     type="button"
-                                    className="text-sm font-semibold text-[#13ec5b] hover:text-green-600 transition-colors"
+                                    className="text-sm font-semibold text-primary hover:text-blue-600 transition-colors"
                                 >
                                     Forgot Password?
                                 </button>
@@ -149,7 +149,7 @@ const Auth: React.FC = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className={`w-full bg-[#13ec5b] hover:bg-[#0fd650] active:scale-[0.98] text-[#0f2b19] font-bold text-lg rounded-2xl py-4 transition-all duration-200 shadow-lg shadow-[#13ec5b]/25 mt-2 flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            className={`w-full bg-primary hover:bg-blue-600 active:scale-[0.98] text-white font-bold text-lg rounded-2xl py-4 transition-all duration-200 shadow-glow mt-2 flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
                         >
                             <span>{isSubmitting ? 'Processing...' : isLogin ? 'Login' : 'Create Account'}</span>
                             <span className="material-symbols-outlined text-[1.25rem]" style={{ fontVariationSettings: "'wght' 700" }}>
@@ -163,7 +163,7 @@ const Auth: React.FC = () => {
                     <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
                         {isLogin ? "Don't have an account?" : 'Already have an account?'}
                         <button
-                            className="text-[#13ec5b] font-bold hover:underline decoration-2 underline-offset-4 ml-1"
+                            className="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1"
                             onClick={() => setMode(isLogin ? 'register' : 'login')}
                         >
                             {isLogin ? 'Create Account' : 'Login'}

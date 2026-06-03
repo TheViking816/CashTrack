@@ -1,5 +1,5 @@
 import { supabase } from '../supabaseClient';
-import { Transaction } from '../types';
+import { Transaction, TransactionType } from '../types';
 
 const getUserId = async (): Promise<string> => {
   const { data, error } = await supabase.auth.getUser();
@@ -35,7 +35,7 @@ export const api = {
     return data as Transaction[];
   },
 
-  async addTransaction(amount: number, type: 'deposit' | 'withdrawal', description: string): Promise<boolean> {
+  async addTransaction(amount: number, type: TransactionType, description: string): Promise<boolean> {
     let userId = '';
     try {
       userId = await getUserId();
@@ -51,6 +51,57 @@ export const api = {
 
     if (error) {
       console.error('Error adding transaction:', JSON.stringify(error, null, 2));
+      return false;
+    }
+    return true;
+  },
+
+  async updateTransaction(
+    id: string,
+    updates: { amount: number; type: TransactionType; description: string }
+  ): Promise<boolean> {
+    let userId = '';
+    try {
+      userId = await getUserId();
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+
+    const { error } = await supabase
+      .from('transactions')
+      .update({
+        amount: updates.amount,
+        type: updates.type,
+        description: updates.description,
+      })
+      .eq('id', id)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Error updating transaction:', JSON.stringify(error, null, 2));
+      return false;
+    }
+    return true;
+  },
+
+  async deleteTransaction(id: string): Promise<boolean> {
+    let userId = '';
+    try {
+      userId = await getUserId();
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+
+    const { error } = await supabase
+      .from('transactions')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Error deleting transaction:', JSON.stringify(error, null, 2));
       return false;
     }
     return true;
