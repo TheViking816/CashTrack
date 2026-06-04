@@ -73,7 +73,7 @@ const TransactionRow: React.FC<Props> = ({ transaction, onChanged }) => {
 
   if (isEditing) {
     return (
-      <div className="flex flex-col gap-3 p-4 bg-white dark:bg-card-dark rounded-xl shadow-sm border border-primary/30 dark:border-primary/40">
+      <div className="flex flex-col gap-3 p-4 bg-white/95 dark:bg-slate-900/95 rounded-2xl shadow-soft border border-primary/30 dark:border-primary/40">
         <div className="grid grid-cols-2 gap-3">
           <label className="flex flex-col gap-1 text-xs font-bold text-slate-500 dark:text-slate-400">
             Tipo
@@ -111,14 +111,14 @@ const TransactionRow: React.FC<Props> = ({ transaction, onChanged }) => {
           <button
             onClick={resetEditState}
             disabled={isSaving}
-            className="h-10 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-300 disabled:opacity-50"
+            className="h-11 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-300 disabled:opacity-50"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="h-10 px-4 rounded-xl bg-primary text-sm font-bold text-white disabled:opacity-50"
+            className="h-11 px-4 rounded-xl bg-primary text-sm font-bold text-white shadow-glow disabled:opacity-50"
           >
             {isSaving ? 'Guardando...' : 'Guardar'}
           </button>
@@ -128,10 +128,10 @@ const TransactionRow: React.FC<Props> = ({ transaction, onChanged }) => {
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 p-4 bg-white dark:bg-card-dark rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+    <div className="flex items-center justify-between gap-3 p-4 bg-white/95 dark:bg-slate-900/80 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800/80">
       <div className="flex items-center gap-4 min-w-0">
-        <div className={`w-10 h-10 rounded-full ${bgClass} flex items-center justify-center ${iconColor}`}>
-          <span className="material-symbols-outlined text-xl">{icon}</span>
+        <div className={`w-12 h-12 rounded-2xl ${bgClass} flex items-center justify-center ${iconColor} ring-1 ring-inset ring-white/20`}>
+          <span className="material-symbols-outlined text-2xl icon-filled">{icon}</span>
         </div>
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-slate-800 dark:text-white capitalize truncate">
@@ -139,18 +139,20 @@ const TransactionRow: React.FC<Props> = ({ transaction, onChanged }) => {
           </span>
           <span className="text-xs text-slate-500 font-medium capitalize">{dateStr}</span>
           <span className="text-xs text-slate-400 dark:text-slate-500 font-semibold">
-            Remanente: {formatCurrency(transaction.remaining_balance)}
+            Saldo tras movimiento: {formatCurrency(transaction.remaining_balance)}
           </span>
         </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">
-        <span className={`font-bold ${colorClass}`}>
-          {amountPrefix}{formatCurrency(Math.abs(transaction.amount))}
-        </span>
+        <div className="min-w-[88px] text-right">
+          <span className={`block font-extrabold ${colorClass}`}>
+            {amountPrefix}{formatCurrency(Math.abs(transaction.amount))}
+          </span>
+        </div>
         <button
           onClick={() => setIsEditing(true)}
           disabled={isSaving}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-primary dark:hover:bg-slate-800 disabled:opacity-50"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-primary hover:bg-blue-100 dark:bg-blue-500/15 dark:text-blue-300 dark:hover:bg-blue-500/25 disabled:opacity-50"
           aria-label="Editar registro"
         >
           <span className="material-symbols-outlined text-[20px]">edit</span>
@@ -158,7 +160,7 @@ const TransactionRow: React.FC<Props> = ({ transaction, onChanged }) => {
         <button
           onClick={handleDelete}
           disabled={isSaving}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 disabled:opacity-50"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-100 dark:bg-red-500/15 dark:text-red-300 dark:hover:bg-red-500/25 disabled:opacity-50"
           aria-label="Eliminar registro"
         >
           <span className="material-symbols-outlined text-[20px]">delete</span>

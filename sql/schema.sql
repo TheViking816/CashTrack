@@ -9,11 +9,12 @@ create table if not exists public.transactions (
   created_at timestamptz not null default now(),
   amount numeric(12,2) not null check (amount > 0),
   type text not null check (type in ('deposit', 'withdrawal')),
-  description text
+  description text not null default ''
 );
 
 alter table public.transactions
-  alter column description set default '';
+  alter column description set default '',
+  alter column description set not null;
 
 create index if not exists transactions_created_at_idx
   on public.transactions (created_at desc);
