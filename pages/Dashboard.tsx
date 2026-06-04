@@ -36,6 +36,8 @@ const Dashboard: React.FC = () => {
 
     const handleSignOut = async () => {
         if (!isSupabaseConfigured || !supabase) {
+            window.localStorage.removeItem('cashtrack-local-mode');
+            window.location.reload();
             return;
         }
 

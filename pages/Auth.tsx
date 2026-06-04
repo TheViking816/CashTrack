@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/logo-mark.svg';
 
-const Auth: React.FC = () => {
+interface Props {
+    onContinueLocal?: () => void;
+}
+
+const Auth: React.FC<Props> = ({ onContinueLocal }) => {
     const [mode, setMode] = useState<'login' | 'register'>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,13 +20,13 @@ const Auth: React.FC = () => {
         setError('');
         setNotice('');
 
-        if (!email || !password) {
-            setError('Completa el correo y la contrasena.');
+        if (!supabase) {
+            setError('No hay backend configurado. Puedes continuar en modo local o conectar Supabase.');
             return;
         }
 
-        if (!supabase) {
-            setError('Supabase no esta configurado en este entorno.');
+        if (!email || !password) {
+            setError('Completa el correo y la contrasena.');
             return;
         }
 
@@ -30,7 +34,7 @@ const Auth: React.FC = () => {
         if (mode === 'login') {
             const { error: signInError } = await supabase.auth.signInWithPassword({
                 email,
-                password
+                password,
             });
             if (signInError) {
                 setError(signInError.message);
@@ -38,7 +42,7 @@ const Auth: React.FC = () => {
         } else {
             const { data, error: signUpError } = await supabase.auth.signUp({
                 email,
-                password
+                password,
             });
             if (signUpError) {
                 setError(signUpError.message);
@@ -80,9 +84,15 @@ const Auth: React.FC = () => {
 
                 <div className="w-full bg-white/70 dark:bg-card-dark/70 backdrop-blur-sm rounded-3xl p-1">
                     <form className="space-y-5 p-5" onSubmit={handleSubmit}>
+                        {!supabase ? (
+                            <div className="text-sm text-amber-800 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-200 px-3 py-3 rounded-xl border border-amber-100 dark:border-amber-900/40">
+                                No hay Supabase configurado para iniciar sesion. Si encuentras las claves, se puede recuperar el login real; mientras tanto puedes usar la app en modo local.
+                            </div>
+                        ) : null}
+
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 ml-1" htmlFor="email">
-                                Username or Email
+                                Email
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -92,7 +102,7 @@ const Auth: React.FC = () => {
                                     className="block w-full rounded-2xl border-0 py-4 pl-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 dark:bg-background-dark dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
                                     id="email"
                                     name="email"
-                                    placeholder="Enter your email"
+                                    placeholder="tu@email.com"
                                     type="email"
                                     autoComplete="email"
                                     value={email}
@@ -102,7 +112,7 @@ const Auth: React.FC = () => {
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 ml-1" htmlFor="password">
-                                Password
+                                Contrasena
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -112,7 +122,7 @@ const Auth: React.FC = () => {
                                     className="block w-full rounded-2xl border-0 py-4 pl-11 pr-11 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 dark:bg-background-dark dark:ring-white/10 dark:text-white dark:placeholder:text-slate-600 transition-all"
                                     id="password"
                                     name="password"
-                                    placeholder="••••••••"
+                                    placeholder="********"
                                     type={showPassword ? 'text' : 'password'}
                                     autoComplete={isLogin ? 'current-password' : 'new-password'}
                                     value={password}
@@ -122,19 +132,11 @@ const Auth: React.FC = () => {
                                     type="button"
                                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                                     onClick={() => setShowPassword((prev) => !prev)}
-                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    aria-label={showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
                                 >
                                     <span className="material-symbols-outlined text-[1.25rem]">
                                         {showPassword ? 'visibility' : 'visibility_off'}
                                     </span>
-                                </button>
-                            </div>
-                            <div className="flex justify-end mt-2">
-                                <button
-                                    type="button"
-                                    className="text-sm font-semibold text-primary hover:text-blue-600 transition-colors"
-                                >
-                                    Forgot Password?
                                 </button>
                             </div>
                         </div>
@@ -153,28 +155,42 @@ const Auth: React.FC = () => {
 
                         <button
                             type="submit"
-                            disabled={isSubmitting}
-                            className={`w-full bg-primary hover:bg-blue-600 active:scale-[0.98] text-white font-bold text-lg rounded-2xl py-4 transition-all duration-200 shadow-glow mt-2 flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            disabled={isSubmitting || !supabase}
+                            className={`w-full bg-primary hover:bg-blue-600 active:scale-[0.98] text-white font-bold text-lg rounded-2xl py-4 transition-all duration-200 shadow-glow mt-2 flex items-center justify-center gap-2 ${
+                                isSubmitting || !supabase ? 'opacity-60 cursor-not-allowed' : ''
+                            }`}
                         >
-                            <span>{isSubmitting ? 'Processing...' : isLogin ? 'Login' : 'Create Account'}</span>
+                            <span>{isSubmitting ? 'Procesando...' : isLogin ? 'Iniciar sesion' : 'Crear cuenta'}</span>
                             <span className="material-symbols-outlined text-[1.25rem]" style={{ fontVariationSettings: "'wght' 700" }}>
                                 arrow_forward
                             </span>
                         </button>
+
+                        {!supabase ? (
+                            <button
+                                type="button"
+                                onClick={onContinueLocal}
+                                className="w-full bg-white dark:bg-background-dark text-primary ring-1 ring-inset ring-primary/30 hover:bg-blue-50 dark:hover:bg-slate-800 font-bold text-base rounded-2xl py-4 transition-colors"
+                            >
+                                Continuar en modo local
+                            </button>
+                        ) : null}
                     </form>
                 </div>
 
-                <div className="mt-8 text-center">
-                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
-                        {isLogin ? "Don't have an account?" : 'Already have an account?'}
-                        <button
-                            className="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1"
-                            onClick={() => setMode(isLogin ? 'register' : 'login')}
-                        >
-                            {isLogin ? 'Create Account' : 'Login'}
-                        </button>
-                    </p>
-                </div>
+                {supabase ? (
+                    <div className="mt-8 text-center">
+                        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            {isLogin ? 'No tienes cuenta?' : 'Ya tienes cuenta?'}
+                            <button
+                                className="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1"
+                                onClick={() => setMode(isLogin ? 'register' : 'login')}
+                            >
+                                {isLogin ? 'Crear cuenta' : 'Iniciar sesion'}
+                            </button>
+                        </p>
+                    </div>
+                ) : null}
             </div>
         </div>
     );
