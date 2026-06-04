@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { TransactionWithBalance } from '../types';
 import TransactionRow from '../components/TransactionRow';
-import { supabase } from '../supabaseClient';
+import { isSupabaseConfigured, supabase } from '../supabaseClient';
 import logo from '../assets/logo-mark.svg';
 import { formatCurrencyParts } from '../utils/format';
 import { withRemainingBalance } from '../utils/transactions';
@@ -35,6 +35,10 @@ const Dashboard: React.FC = () => {
     }, []);
 
     const handleSignOut = async () => {
+        if (!isSupabaseConfigured || !supabase) {
+            return;
+        }
+
         try {
             await supabase.auth.signOut({ scope: 'local' });
         } catch (error) {

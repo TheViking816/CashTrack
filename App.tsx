@@ -5,13 +5,19 @@ import AddFunds from './pages/AddFunds';
 import Withdraw from './pages/Withdraw';
 import History from './pages/History';
 import Auth from './pages/Auth';
-import { supabase } from './supabaseClient';
+import { isSupabaseConfigured, supabase } from './supabaseClient';
 
 const App: React.FC = () => {
     const [sessionReady, setSessionReady] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
+        if (!isSupabaseConfigured || !supabase) {
+            setIsAuthenticated(true);
+            setSessionReady(true);
+            return;
+        }
+
         let mounted = true;
         const initSession = async () => {
             try {

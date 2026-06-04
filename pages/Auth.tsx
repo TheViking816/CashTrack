@@ -21,6 +21,11 @@ const Auth: React.FC = () => {
             return;
         }
 
+        if (!supabase) {
+            setError('Supabase no esta configurado en este entorno.');
+            return;
+        }
+
         setIsSubmitting(true);
         if (mode === 'login') {
             const { error: signInError } = await supabase.auth.signInWithPassword({
