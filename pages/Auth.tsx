@@ -53,6 +53,33 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
         setIsSubmitting(false);
     };
 
+    const handlePasswordReset = async () => {
+        setError('');
+        setNotice('');
+
+        if (!supabase) {
+            setError('No hay Supabase configurado para enviar recuperacion.');
+            return;
+        }
+
+        if (!email) {
+            setError('Escribe tu email para enviar la recuperacion.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}${window.location.pathname}`,
+        });
+        setIsSubmitting(false);
+
+        if (resetError) {
+            setError(resetError.message);
+        } else {
+            setNotice('Si ese email existe, Supabase enviara un enlace de recuperacion.');
+        }
+    };
+
     const isLogin = mode === 'login';
 
     return (
@@ -141,6 +168,19 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
                             </div>
                         </div>
 
+                        {supabase ? (
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={handlePasswordReset}
+                                    disabled={isSubmitting}
+                                    className="text-sm font-semibold text-primary hover:text-blue-600 transition-colors disabled:opacity-60"
+                                >
+                                    Recuperar contrasena
+                                </button>
+                            </div>
+                        ) : null}
+
                         {error ? (
                             <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-xl">
                                 {error}
@@ -166,15 +206,13 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
                             </span>
                         </button>
 
-                        {!supabase ? (
-                            <button
-                                type="button"
-                                onClick={onContinueLocal}
-                                className="w-full bg-white dark:bg-background-dark text-primary ring-1 ring-inset ring-primary/30 hover:bg-blue-50 dark:hover:bg-slate-800 font-bold text-base rounded-2xl py-4 transition-colors"
-                            >
-                                Continuar en modo local
-                            </button>
-                        ) : null}
+                        <button
+                            type="button"
+                            onClick={onContinueLocal}
+                            className="w-full bg-white dark:bg-background-dark text-primary ring-1 ring-inset ring-primary/30 hover:bg-blue-50 dark:hover:bg-slate-800 font-bold text-base rounded-2xl py-4 transition-colors"
+                        >
+                            Continuar en modo local
+                        </button>
                     </form>
                 </div>
 
