@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/logo-mark.svg';
 
-interface Props {
-    onContinueLocal?: () => void;
-}
-
-const Auth: React.FC<Props> = ({ onContinueLocal }) => {
+const Auth: React.FC = () => {
     const [mode, setMode] = useState<'login' | 'register'>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,7 +17,7 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
         setNotice('');
 
         if (!supabase) {
-            setError('No hay backend configurado. Puedes continuar en modo local o conectar Supabase.');
+            setError('No hay backend configurado. Conecta Supabase para iniciar sesion.');
             return;
         }
 
@@ -113,7 +109,7 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
                     <form className="space-y-5 p-5" onSubmit={handleSubmit}>
                         {!supabase ? (
                             <div className="text-sm text-amber-800 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-200 px-3 py-3 rounded-xl border border-amber-100 dark:border-amber-900/40">
-                                No hay Supabase configurado para iniciar sesion. Si encuentras las claves, se puede recuperar el login real; mientras tanto puedes usar la app en modo local.
+                                No hay Supabase configurado para iniciar sesion. Esta app requiere una cuenta real para cargar y guardar tus movimientos.
                             </div>
                         ) : null}
 
@@ -206,13 +202,6 @@ const Auth: React.FC<Props> = ({ onContinueLocal }) => {
                             </span>
                         </button>
 
-                        <button
-                            type="button"
-                            onClick={onContinueLocal}
-                            className="w-full bg-white dark:bg-background-dark text-primary ring-1 ring-inset ring-primary/30 hover:bg-blue-50 dark:hover:bg-slate-800 font-bold text-base rounded-2xl py-4 transition-colors"
-                        >
-                            Continuar en modo local
-                        </button>
                     </form>
                 </div>
 

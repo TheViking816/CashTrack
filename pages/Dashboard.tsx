@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionRow from '../components/TransactionRow';
 import { api } from '../services/api';
-import { isSupabaseConfigured, supabase } from '../supabaseClient';
+import { supabase } from '../supabaseClient';
 import { TransactionWithBalance } from '../types';
 import { formatCurrency, formatCurrencyParts } from '../utils/format';
 import { withRemainingBalance } from '../utils/transactions';
@@ -35,14 +35,8 @@ const Dashboard: React.FC = () => {
     }, []);
 
     const handleSignOut = async () => {
-        if (!isSupabaseConfigured || !supabase) {
-            window.localStorage.removeItem('cashtrack-local-mode');
-            window.location.reload();
-            return;
-        }
-
         try {
-            await supabase.auth.signOut({ scope: 'local' });
+            await supabase?.auth.signOut({ scope: 'local' });
         } catch (error) {
             console.error('Error signing out:', error);
         }
@@ -63,7 +57,7 @@ const Dashboard: React.FC = () => {
     }, [transactions]);
 
     const balanceParts = formatCurrencyParts(balance);
-    const storageLabel = isSupabaseConfigured ? 'Sincronizado' : 'Modo local';
+    const storageLabel = 'Sincronizado';
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 pb-24">

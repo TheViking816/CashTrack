@@ -1,25 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { Transaction, TransactionType } from '../types';
 
-const LOCAL_USER_ID = 'local-user';
-const LOCAL_TRANSACTIONS_KEY = 'cashtrack-local-transactions';
-
-const readLocalTransactions = (): Transaction[] => {
-  try {
-    const raw = window.localStorage.getItem(LOCAL_TRANSACTIONS_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (error) {
-    console.error('Error reading local transactions:', error);
-    return [];
-  }
-};
-
-const writeLocalTransactions = (transactions: Transaction[]) => {
-  window.localStorage.setItem(LOCAL_TRANSACTIONS_KEY, JSON.stringify(transactions));
-};
-
 const byNewestFirst = (a: Transaction, b: Transaction) => {
   const dateDiff = new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   return dateDiff || b.id.localeCompare(a.id);
@@ -27,7 +8,7 @@ const byNewestFirst = (a: Transaction, b: Transaction) => {
 
 const getUserId = async (): Promise<string> => {
   if (!supabase) {
-    return LOCAL_USER_ID;
+    throw new Error('Supabase is not configured');
   }
 
   const { data, error } = await supabase.auth.getUser();
@@ -40,8 +21,8 @@ const getUserId = async (): Promise<string> => {
 export const api = {
   async getTransactions(limit?: number): Promise<Transaction[]> {
     if (!supabase) {
-      const transactions = readLocalTransactions().sort(byNewestFirst);
-      return typeof limit === 'number' ? transactions.slice(0, limit) : transactions;
+      console.error('Supabase is not configured');
+      return [];
     }
 
     let userId = '';
@@ -70,17 +51,8 @@ export const api = {
 
   async addTransaction(amount: number, type: TransactionType, description: string): Promise<boolean> {
     if (!supabase) {
-      const transactions = readLocalTransactions();
-      const transaction: Transaction = {
-        id: crypto.randomUUID(),
-        user_id: LOCAL_USER_ID,
-        created_at: new Date().toISOString(),
-        amount,
-        type,
-        description,
-      };
-      writeLocalTransactions([transaction, ...transactions]);
-      return true;
+      console.error('Supabase is not configured');
+      return false;
     }
 
     let userId = '';
@@ -108,12 +80,8 @@ export const api = {
     updates: { amount: number; type: TransactionType; description: string }
   ): Promise<boolean> {
     if (!supabase) {
-      const transactions = readLocalTransactions();
-      const nextTransactions = transactions.map((transaction) =>
-        transaction.id === id ? { ...transaction, ...updates } : transaction
-      );
-      writeLocalTransactions(nextTransactions);
-      return true;
+      console.error('Supabase is not configured');
+      return false;
     }
 
     let userId = '';
@@ -143,8 +111,8 @@ export const api = {
 
   async deleteTransaction(id: string): Promise<boolean> {
     if (!supabase) {
-      writeLocalTransactions(readLocalTransactions().filter((transaction) => transaction.id !== id));
-      return true;
+      console.error('Supabase is not configured');
+      return false;
     }
 
     let userId = '';
@@ -170,11 +138,8 @@ export const api = {
 
   async getBalance(): Promise<number> {
     if (!supabase) {
-      return readLocalTransactions().reduce((acc, curr) => {
-        if (curr.type === 'deposit') return acc + Number(curr.amount);
-        if (curr.type === 'withdrawal') return acc - Number(curr.amount);
-        return acc;
-      }, 0);
+      console.error('Supabase is not configured');
+      return 0;
     }
 
     // For a production app, we would use a database view or RPC.

@@ -7,15 +7,13 @@ import History from './pages/History';
 import Auth from './pages/Auth';
 import { isSupabaseConfigured, supabase } from './supabaseClient';
 
-const LOCAL_MODE_KEY = 'cashtrack-local-mode';
-
 const App: React.FC = () => {
     const [sessionReady, setSessionReady] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         if (!isSupabaseConfigured || !supabase) {
-            setIsAuthenticated(window.localStorage.getItem(LOCAL_MODE_KEY) === 'true');
+            setIsAuthenticated(false);
             setSessionReady(true);
             return;
         }
@@ -48,11 +46,6 @@ const App: React.FC = () => {
         };
     }, []);
 
-    const handleContinueLocal = () => {
-        window.localStorage.setItem(LOCAL_MODE_KEY, 'true');
-        setIsAuthenticated(true);
-    };
-
     if (!sessionReady) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark text-slate-900 dark:text-white">
@@ -65,7 +58,7 @@ const App: React.FC = () => {
         <HashRouter>
             {!isAuthenticated ? (
                 <Routes>
-                    <Route path="*" element={<Auth onContinueLocal={handleContinueLocal} />} />
+                    <Route path="*" element={<Auth />} />
                 </Routes>
             ) : (
                 <Routes>
